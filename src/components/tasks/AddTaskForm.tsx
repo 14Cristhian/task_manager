@@ -4,10 +4,11 @@ import { useState, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { TextInput, Button, InlineNotification, Layer, Stack } from "@carbon/react";
+import { TextInput, Button, InlineNotification, Layer, Stack, TextArea } from "@carbon/react";
 import { Add } from "@carbon/icons-react";
 import { taskSchema, TaskFormData } from "@/lib/validations/taskSchema";
 import { useAddTask } from "@/features/tasks/hooks/useAddTask";
+import TaskFields from "./TaskItem/TaskFields";
 
 export default function AddTaskForm() {
   const { addTask, isLoading } = useAddTask();
@@ -86,23 +87,7 @@ export default function AddTaskForm() {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack gap={4}>
-              <TextInput
-                id="title"
-                labelText="Título"
-                placeholder="Ej. Llamar al cliente"
-                {...register("title")}
-                invalid={!!errors.title}
-                invalidText={errors.title?.message}
-              />
-
-              <TextInput
-                id="description"
-                labelText="Descripción"
-                placeholder="Detalles (opcional)"
-                {...register("description")}
-                invalid={!!errors.description}
-                invalidText={errors.description?.message}
-              />
+              <TaskFields register={register} errors={errors} />
 
               <div
                 style={{

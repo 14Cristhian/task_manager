@@ -1,9 +1,10 @@
 "use client";
 
-import { Modal, TextInput } from "@carbon/react";
+import { Modal, TextArea, TextInput } from "@carbon/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { taskSchema, TaskFormData } from "@/lib/validations/taskSchema";
+import TaskFields from "./TaskFields";
 
 type Props = Readonly<{
   id: number;
@@ -52,24 +53,16 @@ export default function EditModal({
       onRequestClose={onClose}
       onRequestSubmit={submit}
       preventCloseOnClickOutside
-      size="xs"
+      size="sm"
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <TextInput
-          id={`edit-title-${id}`}
-          labelText="Título"
-          value={title}
-          onChange={(e) => handleChange("title", e.currentTarget.value)}
-          invalid={!!errors.title}
-          invalidText={errors.title?.message}
-        />
-        <TextInput
-          id={`edit-desc-${id}`}
-          labelText="Descripción"
-          value={description}
-          onChange={(e) => handleChange("description", e.currentTarget.value)}
-          invalid={!!errors.description}
-          invalidText={errors.description?.message}
+        <TaskFields
+          isEditing
+          idPrefix={`edit-${id}`}
+          title={title}
+          description={description}
+          errors={errors}
+          handleChange={handleChange}
         />
       </div>
     </Modal>
