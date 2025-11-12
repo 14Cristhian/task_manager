@@ -1,6 +1,7 @@
 "use client";
 
 import { TextInput } from "@carbon/react";
+import { JSX } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface FormFieldProps {
@@ -11,13 +12,7 @@ interface FormFieldProps {
   error?: string;
 }
 
-export function FormField({
-  id,
-  label,
-  placeholder,
-  register,
-  error,
-}: FormFieldProps): JSX.Element {
+export function FormField({ id, label, placeholder, register, error }: FormFieldProps): JSX.Element {
   return (
     <div className="form-field">
       <TextInput

@@ -21,7 +21,7 @@ type Props = Readonly<{
   onDeleted?: (message: string) => void;
 }>;
 
-export default function TaskItem({ id, title, description = "", done = false, priority = "low", onDeleted }: Props) {
+export default function TaskItem({ id, title, description = "", done = false, onDeleted }: Props) {
   const { toggle } = useToggleTask();
   const { updateTask } = useUpdateTask();
   const { deleteTask } = useDeleteTask();
@@ -42,14 +42,22 @@ export default function TaskItem({ id, title, description = "", done = false, pr
 
   /**  Guardar edicion */
   const handleSave = useCallback(async () => {
+    const cleanTitle = editedTitle.trim();
+
+    // Verificar si hubo cambios
+    if (cleanTitle === title && editedDesc === description) {
+      // No hay cambios, solo cerramos el modal
+      setIsEditOpen(false);
+      return;
+    }
+
     try {
-      const cleanTitle = editedTitle.trim();
       await updateTask({ id, title: cleanTitle, description: editedDesc });
       setIsEditOpen(false);
     } catch (error) {
       console.error("Error al actualizar tarea:", error);
     }
-  }, [id, editedTitle, editedDesc, updateTask]);
+  }, [id, editedTitle, editedDesc, title, description, updateTask]);
 
   /**  Eliminar tarea */
   const handleDelete = useCallback(async () => {

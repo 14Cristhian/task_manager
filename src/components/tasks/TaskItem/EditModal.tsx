@@ -1,5 +1,9 @@
-import { Modal, TextInput } from "@carbon/react";
+"use client";
 
+import { Modal, TextInput } from "@carbon/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { taskSchema, TaskFormData } from "@/lib/validations/taskSchema";
 
 type Props = Readonly<{
   id: number;
@@ -8,7 +12,7 @@ type Props = Readonly<{
   setTitle: (val: string) => void;
   setDescription: (val: string) => void;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (data: TaskFormData) => void;
   loading?: boolean;
 }>;
 
@@ -22,6 +26,22 @@ export default function EditModal({
   onSave,
   loading,
 }: Props) {
+  const {
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<TaskFormData>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: { title, description },
+  });
+
+  const handleChange = (field: "title" | "description", value: string) => {
+    setValue(field, value);
+    field === "title" ? setTitle(value) : setDescription(value);
+  };
+
+  const submit = handleSubmit(onSave);
+
   return (
     <Modal
       open
@@ -30,7 +50,7 @@ export default function EditModal({
       primaryButtonText={loading ? "Guardando..." : "Guardar"}
       secondaryButtonText="Cancelar"
       onRequestClose={onClose}
-      onRequestSubmit={onSave}
+      onRequestSubmit={submit}
       preventCloseOnClickOutside
       size="xs"
     >
@@ -39,13 +59,17 @@ export default function EditModal({
           id={`edit-title-${id}`}
           labelText="Título"
           value={title}
-          onChange={(e) => setTitle(e.currentTarget.value)}
+          onChange={(e) => handleChange("title", e.currentTarget.value)}
+          invalid={!!errors.title}
+          invalidText={errors.title?.message}
         />
         <TextInput
           id={`edit-desc-${id}`}
           labelText="Descripción"
           value={description}
-          onChange={(e) => setDescription(e.currentTarget.value)}
+          onChange={(e) => handleChange("description", e.currentTarget.value)}
+          invalid={!!errors.description}
+          invalidText={errors.description?.message}
         />
       </div>
     </Modal>

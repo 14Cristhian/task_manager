@@ -23,15 +23,15 @@ export default function AddTaskForm() {
     mode: "onBlur",
   });
 
-  //  Ocultar automaticamente la notificacion
+  //  Ocultar automaticamente la notificación
   useEffect(() => {
     if (feedback) {
       const timer = setTimeout(
         () => {
           setFeedback(null);
         },
-        feedback.type === "success" ? 3000 : 5000
-      ); // 3s para exito, 5s para error
+        feedback.type === "success" ? 3000 : 5000 // 3s para exito, 5s para error
+      );
 
       return () => clearTimeout(timer);
     }
@@ -40,17 +40,25 @@ export default function AddTaskForm() {
   const onSubmit = useCallback(
     (data: TaskFormData) => {
       setFeedback(null);
-      addTask(data, {
+
+      const taskData = {
+        ...data,
+        description: data.description ?? "",
+      };
+
+      addTask(taskData, {
         onSuccess: () => {
           setFeedback({ type: "success", message: "Tarea agregada correctamente" });
           reset();
         },
-        onError: (err: any) =>
+        onError: (err: unknown) => {
+          const errorMessage = err instanceof Error ? err.message : "Error desconocido";
           setFeedback({
             type: "error",
-            message: err?.message ?? "Error al agregar tarea",
-          }),
-      } as any);
+            message: errorMessage ?? "Error al agregar tarea",
+          });
+        },
+      });
     },
     [addTask, reset]
   );

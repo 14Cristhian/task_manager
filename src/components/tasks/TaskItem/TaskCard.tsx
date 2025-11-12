@@ -54,7 +54,7 @@ export default function TaskCard({
     >
       <TaskStatusBar done={done} />
       <TaskToggleButton done={done} onToggle={onToggle} disabled={disabled} />
-      <TaskInfo title={title} description={description} done={done} />
+      <TaskInfo title={title} done={done} {...(description ? { description } : {})} />
       <TaskActions onEdit={onEdit} onDelete={onDelete} disabled={disabled} />
     </Tile>
   );
