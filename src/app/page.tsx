@@ -1,66 +1,163 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import AddTaskForm from "@/components/tasks/AddTaskForm";
+import TaskList from "@/components/tasks/TaskList";
+import {
+  Theme,
+  Grid,
+  Column,
+  Header,
+  HeaderName,
+  HeaderGlobalBar,
+  HeaderGlobalAction,
+  Content,
+  Layer,
+  HeaderPanel,
+} from "@carbon/react";
+import { Notification, LogoGithub, LogoLinkedin, Search, Sun, Moon } from "@carbon/icons-react";
+
+export default function Page() {
+  // Estado para manejar el tema
+  const [theme, setTheme] = useState("g10"); // g10 = claro | g100 = oscuro
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "g10" ? "g100" : "g10"));
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Theme theme={theme}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+        }}
+      >
+        {/* ===== HEADER ===== */}
+        <Header aria-label="Gestor de Tareas">
+          <HeaderName href="#" prefix="">
+            Gestor de Tareas
+          </HeaderName>
+
+          <HeaderGlobalBar>
+            <HeaderGlobalAction aria-label="Notificaciones" onClick={() => {}} tooltipAlignment="center">
+              <Notification size={20} />
+            </HeaderGlobalAction>
+
+            {/* === Boton de cambio de tema === */}
+            <HeaderGlobalAction aria-label="Cambiar tema" onClick={toggleTheme} tooltipAlignment="end">
+              {theme === "g10" ? <Moon size={20} /> : <Sun size={20} />}
+            </HeaderGlobalAction>
+          </HeaderGlobalBar>
+
+          <HeaderPanel href="#notification-button" />
+        </Header>
+
+        {/* ===== CONTENIDO PRINCIPAL ===== */}
+        <Content
+          id="main-content"
+          style={{
+            flex: "1 0 auto",
+            padding: "2rem 1rem",
+          }}
+        >
+          <header
+            style={{
+              textAlign: "center",
+              marginBottom: "3rem",
+              maxWidth: "600px",
+              marginInline: "auto",
+            }}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h1
+              style={{
+                fontSize: "2rem",
+                marginBottom: "0.5rem",
+                fontWeight: 700,
+                color: "var(--cds-text-primary)",
+              }}
+            >
+              Gestor de Tareas
+            </h1>
+            <p
+              style={{
+                color: "var(--cds-text-secondary)",
+                fontSize: "1rem",
+              }}
+            >
+              Organiza tus pendientes de forma clara y eficiente.
+            </p>
+          </header>
+
+          <Grid fullWidth style={{ gap: "1.5rem" }}>
+            <Column sm={4} md={8} xlg={6}>
+              <AddTaskForm />
+            </Column>
+            <Column sm={4} md={8} xlg={10}>
+              <TaskList />
+            </Column>
+          </Grid>
+        </Content>
+
+        {/* ===== FOOTER ===== */}
+        <Theme theme="g100">
+          <Layer
+            style={{
+              flexShrink: 0,
+              backgroundColor: "#000",
+              color: "#f4f4f4",
+              borderTop: "1px solid #262626",
+              padding: "1.5rem 2rem",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            {/* Izquierda */}
+            <div>
+              <p
+                style={{
+                  fontWeight: 600,
+                  fontSize: "0.95rem",
+                  margin: 0,
+                  color: "#f4f4f4",
+                }}
+              >
+                © {new Date().getFullYear()} Gestor de Tareas
+              </p>
+              <p
+                style={{
+                  fontSize: "0.85rem",
+                  color: "#c6c6c6",
+                  margin: 0,
+                }}
+              >
+                Desarrollado con Carbon Design System
+              </p>
+            </div>
+
+            {/* Derecha */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.75rem",
+              }}
+            >
+              <HeaderGlobalAction aria-label="GitHub" onClick={() => window.open("https://github.com", "_blank")}>
+                <LogoGithub size={20} />
+              </HeaderGlobalAction>
+
+              <HeaderGlobalAction aria-label="LinkedIn" onClick={() => window.open("https://linkedin.com", "_blank")}>
+                <LogoLinkedin size={20} />
+              </HeaderGlobalAction>
+            </div>
+          </Layer>
+        </Theme>
+      </div>
+    </Theme>
   );
 }
