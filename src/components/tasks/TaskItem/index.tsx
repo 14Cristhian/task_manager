@@ -45,7 +45,7 @@ export default function TaskItem({ id, title, description = "", done = false, on
 
   /** Abrir modal de edición */
   const handleEditOpen = () => {
-    setInitialValues({ title, description }); // Guardamos valores iniciales
+    setInitialValues({ title, description }); // Guardar Valores iniciales
     setEditedTitle(title);
     setEditedDesc(description);
     setIsEditOpen(true);

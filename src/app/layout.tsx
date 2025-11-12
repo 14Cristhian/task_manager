@@ -1,6 +1,5 @@
 import "../styles/globals.css";
 import { ReactNode } from "react";
-import { Theme } from "@carbon/react";
 import QueryProvider from "@/providers/QueryProvider";
 
 export const metadata = {
@@ -12,9 +11,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
       <body>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@carbon/react";
 import { CheckmarkOutline } from "@carbon/icons-react";
 
@@ -8,47 +10,46 @@ type Props = {
 };
 
 export default function TaskToggleButton({ done, onToggle, disabled = false }: Props) {
-  const activeBg = "var(--cds-tag-background-green, #24a148)"; // verde Carbon
-  const activeBorder = "var(--cds-tag-background-green, #24a148)";
-  const activeIconColor = "#ffffff"; // check blanco cuando activo
-
-  const inactiveBg = "#c9c9c9ff";
-  const inactiveBorder = "2px solid #8d8d8d"; // gris claro
-  const inactiveIconColor = "#2b2b2b"; // icono oscuro cuando inactivo
+  const activeColor = "var(--cds-support-success)";
+  const inactiveColor = "var(--cds-icon-secondary)";
+  const hoverColor = "var(--cds-background-hover)";
 
   return (
     <Button
-      kind="tertiary"
+      kind="ghost"
       size="sm"
       hasIconOnly
       renderIcon={CheckmarkOutline}
       iconDescription={done ? "Marcar como pendiente" : "Marcar como completada"}
-      tooltipAlignment="start"
+      tooltipAlignment="center"
       onClick={disabled ? undefined : onToggle}
       disabled={disabled}
       style={{
-        minWidth: "38px",
-        minHeight: "38px",
+        width: "40px",
+        height: "40px",
         borderRadius: "50%",
-        border: done ? `2px solid ${activeBorder}` : inactiveBorder,
-        backgroundColor: done ? activeBg : inactiveBg,
+        backgroundColor: done ? activeColor : "transparent",
+        border: done ? `2px solid ${activeColor}` : `2px solid ${inactiveColor}`,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        transition: "all 0.3s",
-        outline: "none",
-        boxShadow: "none",
-        color: done ? activeIconColor : inactiveIconColor,
+        color: done ? "#ffffff" : inactiveColor,
+        transition: "all 0.25s ease-in-out",
         cursor: disabled ? "not-allowed" : "pointer",
+        boxShadow: done ? "0 2px 6px rgba(0, 128, 0, 0.3)" : "0 1px 3px rgba(0, 0, 0, 0.1)",
       }}
       onMouseEnter={(e) => {
-        if (!disabled && !done) {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#f3f3f3";
+        if (!disabled) {
+          const btn = e.currentTarget as HTMLButtonElement;
+          btn.style.transform = "scale(1.1)";
+          if (!done) btn.style.backgroundColor = hoverColor;
         }
       }}
       onMouseLeave={(e) => {
-        if (!disabled && !done) {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = inactiveBg;
+        if (!disabled) {
+          const btn = e.currentTarget as HTMLButtonElement;
+          btn.style.transform = "scale(1)";
+          btn.style.backgroundColor = done ? activeColor : "transparent";
         }
       }}
     />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { InlineNotification, Loading, Tile, TextInput, Stack, Button } from "@carbon/react";
+import { InlineNotification, Loading, Tile, Stack, Button, Search } from "@carbon/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTasks } from "@/features/tasks/hooks/useTasks";
 import TaskItem from "./TaskItem";
@@ -51,61 +51,35 @@ export default function TaskList() {
       {/* Header y busqueda */}
       <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
         <h2 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 700 }}>Mis Tareas</h2>
-        <TextInput
+
+        <Search
+          closeButtonLabelText="Clear search input"
           id="search-tasks"
           labelText="Buscar tareas"
           placeholder="Escribe para filtrar..."
-          value={search}
+          size="md"
+          type="search"
           onChange={(e) => setSearch(e.currentTarget.value)}
         />
       </div>
 
       {/* Resumen de tareas */}
-      <Stack orientation="horizontal" gap={1} style={{ marginBottom: "1rem" }}>
-        <Tile
-          style={{
-            flex: 1,
-            textAlign: "center",
-            padding: "1rem",
-            backgroundColor: "var(--cds-layer-1)",
-            borderRadius: "12px",
-            fontWeight: 600,
-          }}
-        >
-          Total <br />
-          <span style={{ fontSize: "1.25rem", color: "var(--cds-text-primary)" }}>{totalTasks}</span>
-        </Tile>
-
-        <Tile
-          style={{
-            flex: 1,
-            textAlign: "center",
-            padding: "1rem",
-            backgroundColor: "var(--cds-layer-1)",
-            borderRadius: "12px",
-            fontWeight: 600,
-          }}
-        >
-          Pendientes <br />
-          <span style={{ fontSize: "1.25rem", color: "#f1c21b" }}>{pendingTasks}</span>
-        </Tile>
-
-        <Tile
-          style={{
-            flex: 1,
-            textAlign: "center",
-            padding: "1rem",
-            backgroundColor: "var(--cds-layer-1)",
-            borderRadius: "12px",
-            fontWeight: 600,
-          }}
-        >
-          Completadas <br />
-          <span style={{ fontSize: "1.25rem", color: "#42be65" }}>{completedTasks}</span>
-        </Tile>
-      </Stack>
+      {/* === Resumen de tareas === */}
+      <div
+        style={{
+          display: "flex",
+          gap: "0.4rem",
+          justifyContent: "center",
+          marginBottom: "2rem",
+        }}
+      >
+        <StatCard label="Total" value={totalTasks} color="var(--cds-text-primary)" />
+        <StatCard label="Pendientes" value={pendingTasks} color="#f1c21b" />
+        <StatCard label="Completadas" value={completedTasks} color="#42be65" />
+      </div>
 
       {/* Lista de tareas */}
+
       {!filteredTasks || filteredTasks.length === 0 ? (
         <Tile
           style={{
@@ -148,5 +122,45 @@ export default function TaskList() {
         </motion.div>
       )}
     </section>
+  );
+}
+
+export function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <motion.div
+      whileHover={{ y: -4, scale: 1.03 }}
+      transition={{ type: "spring", stiffness: 180, damping: 14 }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        padding: "0.6rem 0.8rem",
+        cursor: "default",
+        borderRadius: "0.5rem",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: 700,
+          color,
+          marginBottom: "0.25rem",
+          letterSpacing: "-0.5px",
+        }}
+      >
+        {value}
+      </div>
+      <div
+        style={{
+          fontSize: "0.95rem",
+          fontWeight: 500,
+          opacity: 0.7,
+        }}
+      >
+        {label}
+      </div>
+    </motion.div>
   );
 }
