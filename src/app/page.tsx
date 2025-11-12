@@ -15,11 +15,13 @@ import {
   Layer,
   HeaderPanel,
 } from "@carbon/react";
-import { Notification, LogoGithub, LogoLinkedin, Search, Sun, Moon } from "@carbon/icons-react";
+import { Notification, LogoGithub, LogoLinkedin, Sun, Moon } from "@carbon/icons-react";
+
+type ThemeType = "g10" | "g100" | "white" | "g90";
 
 export default function Page() {
   // Estado para manejar el tema
-  const [theme, setTheme] = useState("g10"); // g10 = claro | g100 = oscuro
+  const [theme, setTheme] = useState<ThemeType>("g10"); // g10 = claro | g100 = oscuro
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "g10" ? "g100" : "g10"));
