@@ -31,6 +31,9 @@ export default function TaskItem({ id, title, description = "", done = false, on
   const [editedTitle, setEditedTitle] = useState(title);
   const [editedDesc, setEditedDesc] = useState(description);
 
+  /** Guardar valores iniciales para resetear */
+  const [initialValues, setInitialValues] = useState({ title, description });
+
   /** Alternar tarea completada */
   const handleToggle = useCallback(async () => {
     try {
@@ -40,13 +43,20 @@ export default function TaskItem({ id, title, description = "", done = false, on
     }
   }, [id, done, toggle]);
 
-  /**  Guardar edicion */
+  /** Abrir modal de edición */
+  const handleEditOpen = () => {
+    setInitialValues({ title, description }); // Guardamos valores iniciales
+    setEditedTitle(title);
+    setEditedDesc(description);
+    setIsEditOpen(true);
+  };
+
+  /** Guardar edición */
   const handleSave = useCallback(async () => {
     const cleanTitle = editedTitle.trim();
 
-    // Verificar si hubo cambios
-    if (cleanTitle === title && editedDesc === description) {
-      // No hay cambios, solo cerramos el modal
+    // Solo hacer petición si hubo cambios
+    if (cleanTitle === initialValues.title && editedDesc === initialValues.description) {
       setIsEditOpen(false);
       return;
     }
@@ -57,9 +67,16 @@ export default function TaskItem({ id, title, description = "", done = false, on
     } catch (error) {
       console.error("Error al actualizar tarea:", error);
     }
-  }, [id, editedTitle, editedDesc, title, description, updateTask]);
+  }, [id, editedTitle, editedDesc, initialValues, updateTask]);
 
-  /**  Eliminar tarea */
+  /** Cancelar edición y resetear valores */
+  const handleCancelEdit = () => {
+    setEditedTitle(initialValues.title);
+    setEditedDesc(initialValues.description);
+    setIsEditOpen(false);
+  };
+
+  /** Eliminar tarea */
   const handleDelete = useCallback(async () => {
     try {
       await deleteTask(id);
@@ -78,12 +95,12 @@ export default function TaskItem({ id, title, description = "", done = false, on
           description={description}
           done={!!done}
           onToggle={handleToggle}
-          onEdit={() => setIsEditOpen(true)}
+          onEdit={handleEditOpen}
           onDelete={() => setIsDeleteOpen(true)}
         />
       </motion.div>
 
-      {/*  Modal de edicion */}
+      {/* Modal de edición */}
       <AnimatePresence>
         {isEditOpen && (
           <Layer>
@@ -91,16 +108,16 @@ export default function TaskItem({ id, title, description = "", done = false, on
               id={id}
               title={editedTitle}
               description={editedDesc}
-              onClose={() => setIsEditOpen(false)}
-              onSave={handleSave}
               setTitle={setEditedTitle}
               setDescription={setEditedDesc}
+              onClose={handleCancelEdit} // Resetea valores al cancelar
+              onSave={handleSave}
             />
           </Layer>
         )}
       </AnimatePresence>
 
-      {/*  Modal de eliminacion */}
+      {/* Modal de eliminación */}
       <AnimatePresence>
         {isDeleteOpen && (
           <Layer>

@@ -12,7 +12,7 @@ type Props = Readonly<{
   setTitle: (val: string) => void;
   setDescription: (val: string) => void;
   onClose: () => void;
-  onSave: (data: TaskFormData) => void;
+  onSave: () => void; // ya la logica de save está en el padre
   loading?: boolean;
 }>;
 

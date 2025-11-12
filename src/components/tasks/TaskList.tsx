@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { InlineNotification, Loading, Tile, TextInput, Stack } from "@carbon/react";
+import { InlineNotification, Loading, Tile, TextInput, Stack, Button } from "@carbon/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTasks } from "@/features/tasks/hooks/useTasks";
 import TaskItem from "./TaskItem";
@@ -38,9 +38,12 @@ export default function TaskList() {
         kind="error"
         title="Error al cargar tareas"
         subtitle={error?.message ?? "Por favor, inténtalo nuevamente."}
-        actions={<button onClick={() => refetch()}>Reintentar</button>}
         lowContrast
-      />
+      >
+        <Button kind="secondary" size="sm" onClick={() => refetch()}>
+          Reintentar
+        </Button>
+      </InlineNotification>
     );
 
   return (
