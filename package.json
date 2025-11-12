@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest --watchAll"
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@carbon/react": "^1.95.0",
@@ -23,7 +23,9 @@
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.90.2",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
