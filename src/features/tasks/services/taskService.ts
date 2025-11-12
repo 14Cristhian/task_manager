@@ -9,10 +9,10 @@ export interface Task {
 
 export class TaskService {
   static async getAll(): Promise<Task[]> {
-    const { data, error } = await supabase.from<Task>("tasks").select("*").order("id", { ascending: false });
+    const { data, error } = await supabase.from("tasks").select("*").order("id", { ascending: false });
 
     if (error) throw new Error(error.message);
-    return data ?? [];
+    return (data as Task[]) ?? [];
   }
 
   static async insert({ title, description }: Pick<Task, "title" | "description">): Promise<void> {
